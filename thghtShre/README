@@ -1,0 +1,33 @@
+
+
+Specification of message status:
+    60% of messages are public
+    20% of messages are protected
+    20% of messages are private
+
+Specification of protected message recepient:
+    70% of protected messages are addressed to subscribers
+    15% of protected messages are addressed to self
+    15% of protected messages are addressed to another random user
+
+Specificiation of private message recepient:
+    90% of private messages are addressed to another random user
+    10% of private messages are addressed to self
+
+Specification of public message recepient:
+    40% of public messages are addressed to all
+    40% of public messages are addressed to subscribers
+    10% of public messages are addressed to another random user
+    10% of public messages are addressed to self
+
+Specification of in-response messages:
+    80% will be normal messages
+    20% will be response messages (if messages exist)
+
+Specification of number of words in a message:
+    random(2, 21) [uniform distribution]
+
+Specification of choosing words from sense.txt:
+    random(0, 6834) [uniform distribution] for each word
+
+
