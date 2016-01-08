@@ -1,0 +1,30 @@
+
+
+
+Initial number of games ongoing at the same time:
+	based on total number of logRecords:
+		(1-10) : 1
+		(11+) : logRecords * random(.05, .15)
+
+Moves per game:
+	random(30, 70)
+
+Specification of a win:
+	random(0, 1)
+	where 0 is a loss and 1 is a win
+
+Specification of a special move:
+	random(0, 3)
+	where 0 is Shuffle
+	1 is Clear
+	2 is Invert 
+	3 is Rotate
+
+
+Specification of special move or regular move:
+	random(1, 100)
+	where 1-90 is a regular move
+	91-100 is a special move
+
+
+
