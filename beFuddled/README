@@ -4,10 +4,15 @@
 Initial number of games ongoing at the same time:
 	based on total number of logRecords:
 		(1-10) : 1
-		(11+) : logRecords * random(.05, .15)
+		(11+) : logRecords * random(.05, .15) - cap number of games
 
 Moves per game:
-	random(30, 70)
+	10% - 9-20 moves
+	20% - 21-30 moves
+	50% - 31-50 moves
+	15% - 51-70 moves
+	5% - 71-100 moves
+
 
 Specification of a win:
 	random(0, 1)
@@ -25,6 +30,34 @@ Specification of special move or regular move:
 	random(1, 100)
 	where 1-90 is a regular move
 	91-100 is a special move
+
+
+
+Special Moves Based on number of moves per game:
+	(9-30) - 1
+	(31-50) - 2
+	(50+) - 3
+
+
+
+Probablity of starting a game vs playing a game
+	70% - play game
+	30% - start game
+		only start new game if ongoing games is less than cap number of games
+
+
+Determining which game to play a move
+	randomly select a gameid from the current ongoing games
+		select a random number from max game id to min game id
+			if it exists, use it, if not do another random game id pull
+
+
+Board Location x and y coord:
+	1-2: 3%
+	3-6: 12%
+	7-13: 70%
+	14-17: 12%
+	18-20: 3%
 
 
 
