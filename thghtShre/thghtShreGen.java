@@ -92,13 +92,21 @@ class thghtShreGen {
         }
     }
 
-    private static JSONArray generateJSON(int numObjects) {
-        ArrayList<JSONObject> objects = new ArrayList<JSONObject>();
+    private static void generateJSON(String filename, int numObjects) {
+        PrintWriter writer = null;
         JSONObject object;
         int messageId = 0;
         String status;
 
         scanWordFile();
+
+        try {
+            writer = new PrintWriter(new FileWriter(filename));
+            writer.println("[");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
 
         for (int i = 0; i < numObjects; i++) {
             status = getStatus();
@@ -111,36 +119,21 @@ class thghtShreGen {
                 
                 if (shouldRespond() && i > 0)
                     object.put("in-response", messageId - randNum(0, messageId));
-
                 object.put("text", getText());
-                objects.add(object);
+
+                writer.println(object.toString(2));
             }
             catch (Exception e) {
                 e.printStackTrace();
             }
         }
-
-        return new JSONArray(objects);
-    }
-
-    private static void writeJSONtoFile(String fileName, JSONArray array) {
-        try {
-            PrintWriter writer = new PrintWriter(new FileWriter(fileName));
-            writer.println(array.toString(2));
-            writer.close();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        writer.println("]");
+        writer.close();
     }
 
     public static void main(String[] args) {
-        JSONArray array;
-
         try {
-            array = generateJSON(Integer.parseInt(args[1]));
-
-            writeJSONtoFile(args[0], array);
+            generateJSON(args[0], Integer.parseInt(args[1]));
         }
         catch (NumberFormatException e) {
             System.out.println(args[1] + " not a number");
