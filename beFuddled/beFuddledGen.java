@@ -213,6 +213,22 @@ class beFuddledGen {
         return location;
     }
 
+    private static String getSpecialMoveType() {
+        int dice = randomNumber(1, 100);
+        String type;
+
+        if (dice <= 50)
+            type = "Shuffle";
+        else if (dice <= 80)
+            type = "Invert";
+        else if (dice <= 95)
+            type = "Clear";
+        else
+            type = "Rotate";
+
+        return type;
+    }
+
     public static JSONObject createRegMoveLogRecord(beFuddledGame gameObj) {
         JSONObject moveRecord = new JSONObject();
         try {
@@ -257,8 +273,7 @@ class beFuddledGen {
             specialMoveAction.put("pointsAdded", pointsAdded);
             specialMoveAction.put("points", gameObj.getPoints() + pointsAdded);
 
-            //TODO: implement the probability for what type of special move it is
-            //specialMoveAction.put("move", ...);
+            specialMoveAction.put("move", getSpecialMoveType());
 
             gameObj.updateActionNum();
             gameObj.updatePoints(pointsAdded);
