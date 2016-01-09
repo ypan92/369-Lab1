@@ -297,33 +297,50 @@ class beFuddledGen {
         }
         else {
 	        String fileName = args[0];
+                PrintWriter writer = null;
 	        try {
 	        	int logTotal = Integer.parseInt(args[1]);
 
-                JSONArray outputLog = new JSONArray();
+                //JSONArray outputLog = new JSONArray();
 
                 int startGames = initialOngoingGames(logTotal);
                 gameCap = startGames;
 
-                //Create the initial Game Start logs and construct their associated
-                //beFuddledGame objects
-                for (int i = 1; i <= startGames; i++) {
-                    JSONObject startLog = initializeNewGameStart();
-                    outputLog.put(startLog);
+                try {
+                    writer = new PrintWriter(new FileWriter(fileName));
+                    writer.println("[");
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
                 }
 
+                //Create the initial Game Start logs and construct their associated
+                //beFuddledGame objects
+                /*
+                for (int i = 1; i <= startGames; i++) {
+                    JSONObject startLog = initializeNewGameStart();
+                    //outputLog.put(startLog);
+                    writer.println(startLog.toString(2));
+                }
+                */
+                
+                writer.println(initializeNewGameStart().toString(2));
+
                 minGameId = 1;
-                maxGameId = gameCap;
+                maxGameId = 1;
+                //maxGameId = gameCap;
 
                 //update the number of log events that have occurred
-                currentLogEvents = startGames;
+                //currentLogEvents = startGames;
+                currentLogEvents = 1;
 
                 //Create the rest of the log events as either existing game moves,
                 //ending a game, or starting a new game
                 while (currentLogEvents < logTotal) {
                     if (shouldStartNewGame()) {
                         JSONObject newStartLog = initializeNewGameStart();
-                        outputLog.put(newStartLog);
+                        //outputLog.put(newStartLog);
+                        writer.println(newStartLog.toString(2));
 
                         //gameCount was incremented in initializeNewGameStart. 
                         //decrement it by one to get the current max game id that 
@@ -336,23 +353,29 @@ class beFuddledGen {
 
                         if (gameObjToPlay.isSpecialMove()) {
                             JSONObject specialMoveLog = createSpecialMoveLogRecord(gameObjToPlay);
-                            outputLog.put(specialMoveLog);
+                            //outputLog.put(specialMoveLog);
+                            writer.println(specialMoveLog.toString(2));
                         }
                         else {
                             JSONObject regMoveLog = createRegMoveLogRecord(gameObjToPlay);
-                            outputLog.put(regMoveLog);
+                            //outputLog.put(regMoveLog);
+                            writer.println(regMoveLog.toString(2));
                         }
                     }
 
                     ++currentLogEvents;
                 }
+                writer.println("]");
+                writer.close();
 
+                /*
                 File outputFile = new File(fileName);
                 outputFile.createNewFile();
                 FileWriter writer = new FileWriter(outputFile);
                 writer.write(outputLog.toString(2));
                 writer.flush();
                 writer.close();
+                */
 	    	}
 	    	catch(Exception e) {
 	    		System.out.println("\nERROR: The given number of record logs to create was not a number!");
