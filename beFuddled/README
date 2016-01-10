@@ -1,17 +1,34 @@
+Partners: Daniel Lee & Yang Pan
 
+Assignment: Lab 1 - BeFuddled
+
+
+In the Makefile for beFuddled, I was require to specify file separators when running the jar file as a colon (:) on a mac.  This may differ on a Windows machine.
+
+Compiling this program can be done with the following command:
+	javac -cp ./org.json-20120521 beFuddledGen.java beFuddledGame.java
+
+Running this program can be done with the following command:
+	java -cp .:org.json-20120521 beFuddledGen fileName logRecords
+		where fileName is commandline argument specifying the file to write output json to
+		and logRecords is an Integer that determines how many json log records to create
+
+
+In order to determine randomness for our json generation for the BeFuddled game, we used the following probability distributions:
 
 
 Initial number of games ongoing at the same time:
-	based on total number of logRecords:
+	based on total number of logRecords (number of json to generate
+	specified by the user as a commandline argument):
 		(1-10) : 1
 		(11+) : logRecords * random(.05, .15) - cap number of games
 
 Moves per game:
-	10% - 9-20 moves
-	20% - 21-30 moves
-	50% - 31-50 moves
-	15% - 51-70 moves
-	5% - 71-100 moves
+	10% chance a game has 9-20 moves
+	20% chance a game has 21-30 moves
+	50% chance a game has 31-50 moves
+	15% chance a game has 51-70 moves
+	5% chance a game has 71-100 moves
 
 
 Specification of a win:
@@ -34,16 +51,16 @@ Specification of special move or regular move:
 
 
 Special Moves Based on number of moves per game:
-	(9-30) - 1
-	(31-50) - 2
-	(50+) - 3
+	(9-30) moves in a game has 1 special move
+	(31-50) moves in a game has 2 special moves
+	(50+) moves in a game has 3 special moves
 
 
 
 Probablity of starting a game vs playing a game
-	70% - play game
-	30% - start game
-		only start new game if ongoing games is less than cap number of games
+	70% chance a move will be to play an existing game
+	30% chance a move will be to start a new game
+		only start a new game if the number of ongoing games is less than the cap number of games
 
 
 Determining which game to play a move
