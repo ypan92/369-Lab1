@@ -6,7 +6,7 @@ Compiling this program can be done with the following command:
     javac -cp ./org.json-20120521 thghtShreGen.java 
 
 Running this program can be done with the following command:
-    java -cp .:org.json-20120521 thghtShreGen fileName logRecords
+    java -cp ./org.json-20120521: thghtShreGen fileName logRecords
         where fileName is commandline argument specifying the file to write output json to
         and logRecords is an Integer that determines how many json log records to create
 

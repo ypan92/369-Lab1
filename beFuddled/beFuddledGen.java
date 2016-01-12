@@ -29,6 +29,7 @@ class beFuddledGen {
 
     public static String getUser() {
         String tempUserId = "u" + randomNumber(1, 10000);
+        int count = 1;
         while (currentUsers.containsKey(tempUserId)) {
             tempUserId = "u" + randomNumber(1, 10000);
         }
@@ -44,7 +45,7 @@ class beFuddledGen {
             gameStart.put("actionType", "GameStart");
         }
         catch (Exception e) {
-
+            e.printStackTrace();
         }
 
         return gameStart;
@@ -59,7 +60,7 @@ class beFuddledGen {
             startRecord.put("action", startAction);
         }
         catch (Exception e) {
-
+            e.printStackTrace();
         }
 
         return startRecord;
@@ -105,7 +106,7 @@ class beFuddledGen {
         Only start if a new game if the currentGames is less than the gameCap
         AND the random number generator is between 71-100 */
     public static boolean shouldStartNewGame() {
-        if (currentGames.size() == gameCap) {
+        if (currentGames.size() == gameCap || currentUsers.size() == 9999) {
             return false;
         }
         else {
@@ -163,7 +164,7 @@ class beFuddledGen {
             }
         }
         catch (Exception e) {
-
+            e.printStackTrace();
         }
 
         return endAction;
@@ -207,7 +208,7 @@ class beFuddledGen {
             }
         }
         catch (Exception e) {
-
+            e.printStackTrace();
         }
 
         return location;
@@ -254,7 +255,7 @@ class beFuddledGen {
             moveRecord.put("action", regMoveAction);
         }
         catch (Exception e) {
-
+            e.printStackTrace();
         }
 
         return moveRecord;
@@ -281,7 +282,7 @@ class beFuddledGen {
             moveRecord.put("action", specialMoveAction);
         }
         catch (Exception e) {
-
+            e.printStackTrace();
         }
 
         return moveRecord;
@@ -301,8 +302,6 @@ class beFuddledGen {
 	        try {
 	        	int logTotal = Integer.parseInt(args[1]);
 
-                //JSONArray outputLog = new JSONArray();
-
                 int startGames = initialOngoingGames(logTotal);
                 gameCap = startGames;
 
@@ -313,34 +312,21 @@ class beFuddledGen {
                 catch (Exception e) {
                     e.printStackTrace();
                 }
-
-                //Create the initial Game Start logs and construct their associated
-                //beFuddledGame objects
-                /*
-                for (int i = 1; i <= startGames; i++) {
-                    JSONObject startLog = initializeNewGameStart();
-                    //outputLog.put(startLog);
-                    writer.println(startLog.toString(2));
-                }
-                */
                 
-                writer.println(initializeNewGameStart().toString(2));
+                writer.println(initializeNewGameStart().toString(2) + ",");
 
                 minGameId = 1;
                 maxGameId = 1;
-                //maxGameId = gameCap;
 
-                //update the number of log events that have occurred
-                //currentLogEvents = startGames;
                 currentLogEvents = 1;
 
                 //Create the rest of the log events as either existing game moves,
                 //ending a game, or starting a new game
                 while (currentLogEvents < logTotal) {
                     if (shouldStartNewGame()) {
+ 
                         JSONObject newStartLog = initializeNewGameStart();
-                        //outputLog.put(newStartLog);
-                        writer.println(newStartLog.toString(2));
+                        writer.println(newStartLog.toString(2) + ",");
 
                         //gameCount was incremented in initializeNewGameStart. 
                         //decrement it by one to get the current max game id that 
@@ -348,34 +334,36 @@ class beFuddledGen {
                         maxGameId = gameCount - 1;
                     }
                     else {
+
                         int gameIdToPlay = getGameIdToPlay();
                         beFuddledGame gameObjToPlay = currentGames.get(gameIdToPlay);
 
-                        if (gameObjToPlay.isSpecialMove()) {
+                        if (gameObjToPlay.getActionNum() == (gameObjToPlay.getTotalMoves() - 1)) {
+                            gameObjToPlay.updateActionNum();
+                            JSONObject endActionObj = createGameEndAction(gameObjToPlay.getActionNum(), gameObjToPlay.getPoints());
+                            JSONObject endMoveLog = new JSONObject();
+                            endMoveLog.put("game", gameObjToPlay.getGameId());
+                            endMoveLog.put("user", gameObjToPlay.getUserId());
+                            endMoveLog.put("action", endActionObj);
+                            currentUsers.remove(gameObjToPlay.getUserId());
+                            writer.println(endMoveLog.toString(2) + ",");
+                        }
+
+                        else if (gameObjToPlay.isSpecialMove()) {
                             JSONObject specialMoveLog = createSpecialMoveLogRecord(gameObjToPlay);
-                            //outputLog.put(specialMoveLog);
-                            writer.println(specialMoveLog.toString(2));
+                            writer.println(specialMoveLog.toString(2) + ",");
                         }
                         else {
                             JSONObject regMoveLog = createRegMoveLogRecord(gameObjToPlay);
-                            //outputLog.put(regMoveLog);
-                            writer.println(regMoveLog.toString(2));
+                            writer.println(regMoveLog.toString(2) + ",");
                         }
+
                     }
 
                     ++currentLogEvents;
                 }
                 writer.println("]");
                 writer.close();
-
-                /*
-                File outputFile = new File(fileName);
-                outputFile.createNewFile();
-                FileWriter writer = new FileWriter(outputFile);
-                writer.write(outputLog.toString(2));
-                writer.flush();
-                writer.close();
-                */
 	    	}
 	    	catch(Exception e) {
 	    		System.out.println("\nERROR: The given number of record logs to create was not a number!");

@@ -3,13 +3,11 @@ Partners: Daniel Lee & Yang Pan
 Assignment: Lab 1 - BeFuddled
 
 
-In the Makefile for beFuddled, I was require to specify file separators when running the jar file as a colon (:) on a mac.  This may differ on a Windows machine.
-
 Compiling this program can be done with the following command:
 	javac -cp ./org.json-20120521 beFuddledGen.java beFuddledGame.java
 
 Running this program can be done with the following command:
-	java -cp .:org.json-20120521 beFuddledGen fileName logRecords
+	java -cp ./org.json-20120521: beFuddledGen fileName logRecords
 		where fileName is commandline argument specifying the file to write output json to
 		and logRecords is an Integer that determines how many json log records to create
 
