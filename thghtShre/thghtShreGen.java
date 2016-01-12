@@ -121,7 +121,7 @@ class thghtShreGen {
                     object.put("in-response", messageId - randNum(0, messageId));
                 object.put("text", getText());
 
-                writer.println(object.toString(2));
+                writer.println(object.toString(2) + ",");
             }
             catch (Exception e) {
                 e.printStackTrace();
